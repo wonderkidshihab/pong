@@ -1,18 +1,29 @@
 import 'dart:async';
+import 'dart:math' show Random;
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
+import 'package:flame/extensions.dart';
 import 'package:flutter/painting.dart';
+import 'package:pong/app/modules/game/components/ball_component.dart';
+import 'package:pong/app/modules/game/helper/limit_to_bound.dart';
 import 'package:pong/app/modules/game/pong_game.dart';
 
 class PlayerComponent extends PositionComponent
-    with HasGameRef<PongGame>, DragCallbacks {
+    with HasGameRef<PongGame>, DragCallbacks, CollisionCallbacks {
   double playerXPosition;
-  PlayerComponent({this.playerXPosition = 20});
+  bool isAIPlayer = false;
+  late Image image;
+  PlayerComponent(
+      {this.playerXPosition = 20,
+      this.isAIPlayer = false,
+      required this.image});
+  int randomOffset =
+      Random().nextInt(100) - 80 * (Random().nextBool() ? 1 : -1);
 
   @override
-  FutureOr<void> onLoad() {
+  FutureOr<void> onLoad() async {
     width = 20;
     height = 100;
     x = playerXPosition;
@@ -22,6 +33,7 @@ class PlayerComponent extends PositionComponent
     add(RectangleComponent(
         size: Vector2(width, height),
         paint: Paint()..color = const Color(0xFFFFFFFF)));
+    add(SpriteComponent.fromImage(image, size: size));
     return super.onLoad();
   }
 
@@ -38,14 +50,31 @@ class PlayerComponent extends PositionComponent
 
     super.onDragUpdate(event);
   }
-}
 
-limitToBound(double value, double min, double max) {
-  if (value < min) {
-    return min;
-  } else if (value > max) {
-    return max;
-  } else {
-    return value;
+  @override
+  void update(double dt) {
+    if (isAIPlayer) {
+      // AI Player
+      // Get the ball position from the gameref and move the player to the ball
+      // position but with a random offset to make it more interesting
+      final ballPosition = gameRef.ballComponent.position;
+      y = limitToBound(
+          ballPosition.y + randomOffset, 0, gameRef.size.y - height);
+    }
+    super.update(dt);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is BallComponent && !isAIPlayer) {
+      reset();
+    }
+    super.onCollision(intersectionPoints, other);
+  }
+
+  void reset() {
+    randomOffset = (Random().nextInt(size.y.floor()) -
+            gameRef.ballComponent.size.y.floor()) *
+        (-1);
   }
 }

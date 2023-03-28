@@ -7,22 +7,26 @@ import 'package:flame/extensions.dart';
 import 'package:flutter/painting.dart';
 import 'package:get/get.dart';
 import 'package:pong/app/modules/game/components/player_component.dart';
+import 'package:pong/app/modules/game/helper/limit_to_bound.dart';
 import 'package:pong/app/modules/game/pong_game.dart';
 import 'package:pong/app/modules/home/controllers/home_controller.dart';
 
 class BallComponent extends CircleComponent
     with HasGameRef<PongGame>, CollisionCallbacks {
-  BallComponent(Vector2 position, Vector2 size) : super(position: position) {
+  BallComponent(Vector2 position, Vector2 size, this.image)
+      : super(position: position) {
     this.size = size;
     paint = Paint()..color = const Color(0xFFFFFFFF);
   }
+  late Image image;
 
   @override
-  Future<void> onLoad() {
+  Future<void> onLoad() async {
     add(CircleHitbox(
       isSolid: true,
       radius: size.x / 2,
     ));
+    add(SpriteComponent.fromImage(image, size: size));
     return super.onLoad();
   }
 
@@ -51,11 +55,15 @@ class BallComponent extends CircleComponent
     // this is done by calculating the distance between the center of the player and the ball
     // get the hit position and subtract the half of the player's height
     // then divide the result by the player's height
+    var hitPosition =
+        (position.y + size.y / 2) - (player.y + (player.height / 2));
 
-    var hitPosition = position.y - (player.y + player.height / 2);
     var hitPositionPercentage = hitPosition / player.height;
-    Get.find<HomeController>().ballYSpeed.value = hitPositionPercentage * 1.5;
-    Get.find<HomeController>().ballXSpeed.value *= -1.25;
+
+    Get.find<HomeController>().ballYSpeed.value = hitPositionPercentage * 5;
+
+    Get.find<HomeController>().ballXSpeed.value = limitToBound(
+        Get.find<HomeController>().ballXSpeed.value *= -1.25, -5, 5);
   }
 
   /*
