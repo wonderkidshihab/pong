@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math' as math;
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -29,7 +30,7 @@ class BallComponent extends CircleComponent
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is PlayerComponent) {
-      onPlayerCollision();
+      onPlayerCollision(other);
     } else if (other is ScreenHitbox) {
       onScreenCollision(intersectionPoints.first);
     } else {
@@ -41,8 +42,20 @@ class BallComponent extends CircleComponent
   // This function is called when the ball collides with the player. It reverses the ball's
 // speed on the x-axis and calls the increment function to increase the score by one.
 
-  void onPlayerCollision() {
-    Get.find<HomeController>().ballXSpeed.value *= -1;
+  void onPlayerCollision(PositionComponent other) {
+    var player = other as PlayerComponent;
+    // depending on the side of the player, the ball will bounce in the opposite direction on the x-axis
+    // and the y-axis speed will depend on the position of the ball in relation to the player
+    // the closer the ball is to the center of the player, the faster it will bounce
+    // the further away the ball is from the center of the player, the slower it will bounce
+    // this is done by calculating the distance between the center of the player and the ball
+    // get the hit position and subtract the half of the player's height
+    // then divide the result by the player's height
+
+    var hitPosition = position.y - (player.y + player.height / 2);
+    var hitPositionPercentage = hitPosition / player.height;
+    Get.find<HomeController>().ballYSpeed.value = hitPositionPercentage * 1.5;
+    Get.find<HomeController>().ballXSpeed.value *= -1.25;
   }
 
   /*
@@ -74,5 +87,7 @@ class BallComponent extends CircleComponent
 
   void reset() {
     position = gameRef.size / 2;
+    Get.find<HomeController>().ballXSpeed.value =
+        math.Random().nextBool() ? 1 : -1 * (math.Random().nextDouble() + 1);
   }
 }
