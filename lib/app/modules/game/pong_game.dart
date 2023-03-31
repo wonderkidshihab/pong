@@ -19,7 +19,8 @@ class PongGame extends FlameGame
   FutureOr<void> onLoad() async {
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
-    await images.loadAll(<String>['ball.png', 'player.png', 'bg.jpg']);
+    // debugMode = true;
+    await images.loadAll(<String>['ball.png', 'player.png', 'bg.png']);
     ballPositon = Vector2(size.x / 2, size.y / 2);
     ballComponent = BallComponent(
         ballPositon, Vector2(40, 40), images.fromCache('ball.png'));
@@ -30,7 +31,7 @@ class PongGame extends FlameGame
     playerComponent2 = PlayerComponent(
         playerXPosition: size.x - 20, image: images.fromCache('player.png'));
     add(SpriteComponent.fromImage(
-      images.fromCache('bg.jpg'),
+      images.fromCache('bg.png'),
       size: size,
     ));
     add(ballComponent);

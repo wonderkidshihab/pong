@@ -5,7 +5,6 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/experimental.dart';
 import 'package:flame/extensions.dart';
-import 'package:flutter/painting.dart';
 import 'package:pong/app/modules/game/components/ball_component.dart';
 import 'package:pong/app/modules/game/helper/limit_to_bound.dart';
 import 'package:pong/app/modules/game/pong_game.dart';
@@ -30,9 +29,6 @@ class PlayerComponent extends PositionComponent
     y = gameRef.size.y / 2 - height / 2;
     size = Vector2(width, height);
     add(RectangleHitbox(size: Vector2(width, height)));
-    add(RectangleComponent(
-        size: Vector2(width, height),
-        paint: Paint()..color = const Color(0xFFFFFFFF)));
     add(SpriteComponent.fromImage(image, size: size));
     return super.onLoad();
   }
