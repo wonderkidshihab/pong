@@ -1,22 +1,15 @@
-<!-- A readme for a Ping pong game made with Flame and Flutter -->
-
-# Flame Flutter Ping Pong
+# Ping Pong
 
 A simple ping pong game made with Flame and Flutter.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. Clone the repository with `git clone https://github.com/wonderkidshihab/pong` .
+2. Open the project in your favorite editor.
+3. Get the dependencies with `flutter pub get` .
+4. Run the project with `flutter run` .
 
-A few resources to get you started if this is your first Flutter project:
+## Screenshots
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-[Facebook](https://facebook.com/student.shihab "Facebook")
-
-[Github](https://github.com/wonderkidshihab "Github")
+![image1](image/README/image2.png)
+![image2](image/README/image3.png)

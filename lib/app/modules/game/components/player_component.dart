@@ -3,7 +3,7 @@ import 'dart:math' show Random;
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
+import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:pong/app/modules/game/components/ball_component.dart';
 import 'package:pong/app/modules/game/helper/limit_to_bound.dart';

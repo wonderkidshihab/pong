@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flame/components.dart';
-import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:pong/app/modules/game/components/ball_component.dart';
@@ -9,7 +8,7 @@ import 'package:pong/app/modules/game/components/player_component.dart';
 import 'package:pong/app/modules/game/components/score_component.dart';
 
 class PongGame extends FlameGame
-    with HasDraggableComponents, HasCollisionDetection {
+    with HasCollisionDetection {
   Vector2 ballPositon = Vector2(700, 500);
   late BallComponent ballComponent;
   late PlayerComponent playerComponent1;
